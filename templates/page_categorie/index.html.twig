@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categorie{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .custom-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #000;
+        }
+
+        .custom-table th {
+            background-color: #f2f2f2;
+        }
+
+        .custom-table td {
+            background-color: #fff;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="my-4">Categorie index</h1>
+
+        <div class="table-responsive">
+            <table class="table custom-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Titre</th>
+                        <th>Articles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categorie in categories %}
+                        <tr>
+                            <td>{{ categorie.id }}</td>
+                            <td>{{ categorie.titre }}</td>
+                            <td>
+                                {% for article in categorie.articles %}
+                                    <a href="{{path('app_article_show', { 'id': article.id })}}">{{ article.titre }}</a>
+                                    
+                                    <br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">No records found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .actions a {
+            margin-right: 10px;
+        }
+
+        .toggle-content {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+
+        .full-content {
+            display: none;
+        }
+
+        .full-content.active {
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Article index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Id</th>
+                {% endif %}
+                <th>Titre</th>
+                <th>Date_parution</th>
+                <th>Contenu</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Date</th>
+                    <th>Etat</th>
+                    <th>Actions</th>
+                {% endif %}
+                <th>Commentaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for articles in article %}
+                <tr>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>{{ article.id }}</td>
+                    {% endif %}
+                    <td>{{ articles.titre }}</td>
+                    <td>{{ articles.dateParution ? articles.dateParution|date('Y-m-d') : '' }}</td>
+                    <td>{{ articles.contenu }}</td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>{{ article.date ? article.date|date('Y-m-d') : '' }}</td>
+                        <td>{{ article.etat ? 'Yes' : 'No' }}</td>
+                        <td class="actions">
+                            <a href="{{ path('app_article_show', {'id': article.id}) }}">Show</a>
+                            <a href="{{ path('app_article_edit', {'id': article.id}) }}">Edit</a>
+                        </td>
+                    {% endif %}
+                    <td>
+                        {% for commentaire in articles.commentaires %}
+                            <p>{{ commentaire.commentaire }}</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{%if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('app_article_new') }}">Create new</a>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function toggleContent(element) {
+            const fullContent = element.parentElement.parentElement.querySelector('.full-content');
+            fullContent.classList.toggle('active');
+        }
+    </script>
+{% endblock %}

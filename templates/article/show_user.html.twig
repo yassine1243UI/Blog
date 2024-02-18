@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block body %}
+    <h1>Article</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Titre</th>
+                <td>{{ article.titre }}</td>
+            </tr>
+            <tr>
+                <th>Contenu</th>
+                <td>{{ article.contenu }}</td>
+            </tr>
+            <tr>
+                <th>Date_parution</th>
+                <td>{{ article.dateParution ? article.dateParution|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_commentaire_new', { 'id': article.id }) }}">Poster un commentaire</a> <br>
+    <a href="{{ path('app_page_categorie') }}">Retour à la liste</a> <br>
+
+{% endblock %}
